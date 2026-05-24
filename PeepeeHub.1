@@ -1,42 +1,63 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
-print("HI!")
+print("HI!2")
 
 local Window = OrionLib:MakeWindow({Name = "PeepeeHub", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest"})
-
 local Tabone = Window:MakeTab({
-	Name = "Main",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+    Name = "Main",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
 })
+
 local Section = Tabone:AddSection({
-	Name = "Useful Tools"
+    Name = "Useful Tools"
 })
+
+-- Unique state tracking variables for each loop
+local autoFishing = false
+local instaAttack = false
+
+-- Toggle 1: Auto Fish
 Tabone:AddToggle({
-	Name = "Enable InstaFishCatch",
-	Default = false,
-	Callback = function(Value)
-		while Value do
-		game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Fish"):WaitForChild("ReelSessionHit"):FireServer()
-		task.wait(0.001)
-		print("[DEBUG!] RUNNING AUTOFISH!")
-		end
-	end    
+    Name = "Enable InstaFishCatch",
+    Default = false,
+    Callback = function(Value)
+        autoFishing = Value -- Set this toggle's specific variable
+        
+        if autoFishing then
+            -- Separate thread prevents this loop from blocking the other toggle
+            task.spawn(function()
+                while autoFishing do
+                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Fish"):WaitForChild("ReelSessionHit"):FireServer()
+                    task.wait(0.001)
+                    print("[DEBUG!] RUNNING AUTOFISH!")
+                end
+            end)
+        end
+    end 
 })
+
+-- Toggle 2: Insta 100% Attack
 Tabone:AddToggle({
-	Name = "Enable Insta 100%",
-	Default = false,
-	Callback = function(Value)
-		while Value do
-		local args = {
-	   {
-		   Alpha = 1,
-		   ResponseTime = 1
-	   }
-   }
-   game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Tools"):WaitForChild("Attack"):FireServer(unpack(args))
-   wait()
-		task.wait(0.001)
-		print("[DEBUG!] RUNNING INSTA100%!")
-		end
-	end    
+    Name = "Enable Insta 100%",
+    Default = false,
+    Callback = function(Value)
+        instaAttack = Value -- Set this toggle's specific variable
+        
+        if instaAttack then
+            -- Separate thread prevents this loop from blocking the fish toggle
+            task.spawn(function()
+                while instaAttack do
+                    local args = {
+                        {
+                            Alpha = 1,
+                            ResponseTime = 1
+                        }
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Tools"):WaitForChild("Attack"):FireServer(unpack(args))
+                    task.wait(0.001)
+                    print("[DEBUG!] RUNNING INSTA100%!")
+                end
+            end)
+        end
+    end 
 })
