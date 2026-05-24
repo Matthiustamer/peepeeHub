@@ -12,7 +12,7 @@ local Section = Tabone:AddSection({
     Name = "Useful Tools"
 })
 
--- Unique state tracking variables for each loop
+-- Global state tracking variables
 local autoFishing = false
 local instaAttack = false
 
@@ -21,10 +21,10 @@ Tabone:AddToggle({
     Name = "Enable InstaFishCatch",
     Default = false,
     Callback = function(Value)
-        autoFishing = Value -- Set this toggle's specific variable
+        autoFishing = Value -- Update state tracker
         
-        if autoFishing then
-            -- Separate thread prevents this loop from blocking the other toggle
+        -- ONLY spawn the loop if the button was actually turned ON (Value == true)
+        if Value then
             task.spawn(function()
                 while autoFishing do
                     game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Fish"):WaitForChild("ReelSessionHit"):FireServer()
@@ -41,10 +41,10 @@ Tabone:AddToggle({
     Name = "Enable Insta 100%",
     Default = false,
     Callback = function(Value)
-        instaAttack = Value -- Set this toggle's specific variable
+        instaAttack = Value -- Update state tracker
         
-        if instaAttack then
-            -- Separate thread prevents this loop from blocking the fish toggle
+        -- ONLY spawn the loop if the button was actually turned ON (Value == true)
+        if Value then
             task.spawn(function()
                 while instaAttack do
                     local args = {
