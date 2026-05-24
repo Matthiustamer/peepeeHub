@@ -1,63 +1,42 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
-print("HI!2")
+print("HI!")
 
 local Window = OrionLib:MakeWindow({Name = "PeepeeHub", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest"})
+
 local Tabone = Window:MakeTab({
-    Name = "Main",
-    Icon = "rbxassetid://4483345998",
-    PremiumOnly = false
+	Name = "Main",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
 })
-
 local Section = Tabone:AddSection({
-    Name = "Useful Tools"
+	Name = "Useful Tools"
 })
-
--- Global state tracking variables
-local autoFishing = false
-local instaAttack = false
-
--- Toggle 1: Auto Fish
 Tabone:AddToggle({
-    Name = "Enable InstaFishCatch",
-    Default = false,
-    Callback = function(Value)
-        autoFishing = Value -- Update state tracker
-        
-        -- ONLY spawn the loop if the button was actually turned ON (Value == true)
-        if Value then
-            task.spawn(function()
-                while autoFishing do
-                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Fish"):WaitForChild("ReelSessionHit"):FireServer()
-                    task.wait(0.001)
-                    print("[DEBUG!] RUNNING AUTOFISH!")
-                end
-            end)
-        end
-    end 
+	Name = "Enable InstaFishCatch",
+	Default = false,
+	Callback = function(Value)
+		while true do
+		game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Fish"):WaitForChild("ReelSessionHit"):FireServer()
+		task.wait(0.001)
+		print("[DEBUG!] RUNNING AUTOFISH!")
+		end
+	end    
 })
-
--- Toggle 2: Insta 100% Attack
 Tabone:AddToggle({
-    Name = "Enable Insta 100%",
-    Default = false,
-    Callback = function(Value)
-        instaAttack = Value -- Update state tracker
-        
-        -- ONLY spawn the loop if the button was actually turned ON (Value == true)
-        if Value then
-            task.spawn(function()
-                while instaAttack do
-                    local args = {
-                        {
-                            Alpha = 1,
-                            ResponseTime = 1
-                        }
-                    }
-                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Tools"):WaitForChild("Attack"):FireServer(unpack(args))
-                    task.wait(0.001)
-                    print("[DEBUG!] RUNNING INSTA100%!")
-                end
-            end)
-        end
-    end 
+	Name = "Enable Insta 100%",
+	Default = false,
+	Callback = function(Value)
+		while true do
+		local args = {
+	   {
+		   Alpha = 1,
+		   ResponseTime = 1
+	   }
+   }
+   game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Tools"):WaitForChild("Attack"):FireServer(unpack(args))
+   wait()
+		task.wait(0.001)
+		print("[DEBUG!] RUNNING INSTA100%!")
+		end
+	end    
 })
