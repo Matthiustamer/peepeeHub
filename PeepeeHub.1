@@ -15,6 +15,10 @@ Tabone:AddToggle({
 	Name = "autofish",
 	Default = false,
 	Callback = function(Value)
-		print("clicked")
+		while Value do
+		game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Fish"):WaitForChild("ReelSessionHit"):FireServer()
+		task.wait(0.001)
+		print("[DEBUG!] RUNNING AUTOFISH!")
+		end
 	end    
 })
