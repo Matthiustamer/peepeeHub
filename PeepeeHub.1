@@ -1,89 +1,20 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-local Window = Rayfield:CreateWindow({
-   Name = "PeepeeHub",
-   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "PeepeeHub Interface Suite",
-   LoadingSubtitle = "by uhhh idk",
-   ShowText = "Masturbate!", -- for mobile users to unhide Rayfield, change if you'd like
-   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
+print("HI!")
 
-   ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
+local Window = OrionLib:MakeWindow({Name = "PeepeeHub", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest"})
 
-   DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false, -- Prevents Rayfield from emitting warnings when the script has a version mismatch with the interface.
-
-   -- ScriptID = "sid_xxxxxxxxxxxx", -- Your Script ID from developer.sirius.menu — enables analytics, managed keys, and script hosting
-
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = nil, -- Create a custom folder for your hub/game
-      FileName = "PeepeeHub"
-   },
-
-   Discord = {
-      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
-      Invite = "noinvitelink", -- The Discord invite code, do not include Discord.gg/. E.g. Discord.gg/ABCD would be ABCD
-      RememberJoins = true -- Set this to false to make them join the Discord every time they load it up
-   },
-
-   KeySystem = false, -- Set this to true to use our key system
-   KeySettings = {
-      Title = "Untitled",
-      Subtitle = "Key System",
-      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
-      FileName = "Key", -- It is recommended to use something unique, as other scripts using Rayfield may overwrite your key file
-      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"xanderiscute"} -- List of keys that the system will accept, can be RAW file links (pastebin, github, etc.) or simple strings ("hello", "key22")
-   }
+local Tabone = Window:MakeTab({
+	Name = "Main",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
 })
-
-
--- MAIN TAB --
-local MainTab = Window:CreateTab("Main🏠", nil) -- Title, Image
-local MainSection = MainTab:CreateSection("Useful Tools")
-
-local fishing = false -- Tracks whether the loop should keep running
-
-local Toggle = MainTab:CreateToggle({
-    Name = "Enable AutoCatchFish",
-    CurrentValue = false,
-    Flag = "Toggle1", 
-    Callback = function(Value)
-        fishing = Value -- Update our tracking variable (true or false)
-
-        if fishing then
-            Rayfield:Notify({
-                Title = "AutoCatch",
-                Content = "Toggled on!",
-                Duration = 2.5,
-                Image = 4483362458,
-            })
-            
-            -- task.spawn prevents the infinite loop from crashing your UI
-            task.spawn(function()
-                while true do
-                    -- 1. Check if the toggle was turned off
-                    if not fishing then 
-                        break -- This exits the 'while true do' loop completely
-                    end
-                    
-                    -- 2. Your script logic
-                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Fish"):WaitForChild("ReelSessionHit"):FireServer()
-                    task.wait(0.001)
-                    print("debug")
-                end
-            end)
-        else
-            Rayfield:Notify({
-                Title = "AutoCatch",
-                Content = "Toggled off!",
-                Duration = 2.5,
-                Image = 4483362458,
-            })
-        end
-    end,
+local Section = Tabone:AddSection({
+	Name = "Useful Tools"
 })
-
-
-
+Tabone:AddToggle({
+	Name = "autofish",
+	Default = false,
+	Callback = function(Value)
+		print("clicked")
+	end    
+})
